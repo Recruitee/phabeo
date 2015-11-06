@@ -1,19 +1,4 @@
 # Phabeo
+Simple css inliner util for your email templates.
 
-**TODO: Add description**
-
-## Installation
-
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
-
-  1. Add phabeo to your list of dependencies in `mix.exs`:
-
-        def deps do
-          [{:phabeo, "~> 0.0.1"}]
-        end
-
-  2. Ensure phabeo is started before your application:
-
-        def application do
-          [applications: [:phabeo]]
-        end
+Very experimental. Under development.
