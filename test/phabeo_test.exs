@@ -3,28 +3,31 @@ defmodule PhabeoTest do
   doctest Phabeo
  
   
-  test "Tempalte find styles" do
-    html = 
+  test "render style tag to inlined css" do
+
+    html =
       """
         <html>
         <style>
-          .example { 
-            color:red; }
-
-          .super-duper a { background-color:red; 
-          }
-        
+          .example {color: red;}
         </style>
         <body>
-        <div class="example"></div>
+          <div class="example"></div>
         </body>
         </html>
       """
+      
+    checkable_attribute =
+      Phabeo.render(html)
+      |> Floki.find(".example")
+      |> Floki.attribute("style")
 
-    rendered = Phabeo.render(html)
+    assert checkable_attribute === ["color: red;"]
 
-    IO.inspect rendered
-
-    assert 1 + 1 == 2
   end
+
+  
+
+
+
 end

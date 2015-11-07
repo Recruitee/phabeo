@@ -1,6 +1,6 @@
 defmodule Phabeo do
   
-  def render(template, rule_extractor \\ &rules_from_inner_style/1 ) do
+  def render(template, rule_extractor \\ &rules_from_inner_style/1) do
     parsed_template = Floki.parse(template)
     rules = rule_extractor.(parsed_template)
     complete_template = search_by_rules(parsed_template, rules)
@@ -17,7 +17,6 @@ defmodule Phabeo do
     |> String.replace(~r/\s+/, " ")
 
     Regex.scan(~r/([^\{]*){([^\}]*)}/, clear_css_string, capture: :all_but_first)
-
   end
 
   defp update_attr({el, attr, body}, new_attr) do
@@ -26,7 +25,9 @@ defmodule Phabeo do
 
   defp list_it(list, old, style_value) do
     case list do
-      {el, attr, [head | tail]} -> 
+      {el, attr, body} -> 
+        IO.inspect body
+        [head | tail] = body
         if [head] == old do 
           head = update_attr(head, {"style", style_value})
         end 
