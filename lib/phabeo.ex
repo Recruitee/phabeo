@@ -1,5 +1,5 @@
 defmodule Phabeo do
-  
+
   def render(template, rule_extractor \\ &rules_from_inner_style/1) do
     parsed_template = Floki.parse(template)
     rules = rule_extractor.(parsed_template)
@@ -8,11 +8,11 @@ defmodule Phabeo do
   end
 
   defp rules_from_inner_style(parsed_template) do
-    style = Floki.find(parsed_template, "style") 
+    style = Floki.find(parsed_template, "style")
 
     {_,_,value} = style |> List.first
 
-    clear_css_string = List.first(value)  
+    clear_css_string = List.first(value)
     |> String.replace(~r/\r?\n|\r/, "")
     |> String.replace(~r/\s+/, " ")
 
@@ -25,18 +25,16 @@ defmodule Phabeo do
 
   defp list_it(list, old, style_value) do
     case list do
-      {el, attr, body} -> 
-        IO.inspect body
+      {el, attr, body} ->
+        if Mix.env == :dev, do: IO.inspect body
         [head | tail] = body
-        if [head] == old do 
-          head = update_attr(head, {"style", style_value})
-        end 
+        head = if [head] == old, do: update_attr(head, {"style", style_value}), else: head
         [{el, attr, [head | list_it(tail, old, style_value)]}]
-      [el] -> list_it(el, old, style_value) 
-      [] -> [] 
+      [el] -> list_it(el, old, style_value)
+      [] -> []
     end
   end
-   
+
   defp search_by_rules(template, rules) do
     Enum.reduce rules, template, fn(rule,acc)->
       [selector, value] = rule
